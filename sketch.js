@@ -33,6 +33,7 @@ const STATE_OVER = "over";
 
 let gameState = STATE_START;
 let currentLevel = 1;
+let debugMode = false;
 const MAX_LEVELS = 3;
 
 // ------------------------------------------------------------
@@ -113,6 +114,10 @@ function draw() {
     drawWinScreen();
   } else if (gameState === STATE_OVER) {
     drawGameOver();
+  }
+
+  if (debugMode) {
+    drawDebugPanel();
   }
 }
 
@@ -399,6 +404,58 @@ function drawHUD() {
 }
 
 // ------------------------------------------------------------
+// drawDebugPanel()
+// Draws a semi-transparent debug overlay with shortcuts.
+// ------------------------------------------------------------
+function drawDebugPanel() {
+  let panelH = 80;
+  let panelY = height - panelH;
+
+  push();
+  fill(15, 15, 25, 220);
+  noStroke();
+  rect(0, panelY, width, panelH);
+
+  fill(220);
+  textSize(14);
+  textAlign(LEFT);
+  text("DEBUG PANEL", 16, panelY + 22);
+  textSize(12);
+  text("D: toggle debug mode", 16, panelY + 40);
+
+  let buttonLabels = [
+    "S: Start",
+    "1: Level 1",
+    "2: Level 2",
+    "3: Level 3",
+    "W: Win",
+    "O: Game Over",
+  ];
+  let buttonW = 88;
+  let buttonH = 28;
+  let gap = 12;
+  let startX = 16;
+  let startY = panelY + 44;
+
+  for (let i = 0; i < buttonLabels.length; i++) {
+    let x = startX + i * (buttonW + gap);
+    let y = startY;
+
+    fill(40, 50, 80);
+    stroke(100);
+    strokeWeight(1);
+    rect(x, y, buttonW, buttonH, 8);
+
+    noStroke();
+    fill(240);
+    textSize(12);
+    textAlign(CENTER, CENTER);
+    text(buttonLabels[i], x + buttonW / 2, y + buttonH / 2);
+  }
+  pop();
+}
+
+// ------------------------------------------------------------
 // drawStartScreen()
 // ------------------------------------------------------------
 function drawStartScreen() {
@@ -517,7 +574,32 @@ function mousePressed() {
 // Use key === "s" or "w" to jump to start or win screens.
 // ------------------------------------------------------------
 function keyPressed() {
-  // YOUR DEBUG CODE GOES HERE
+  if (key === "d" || key === "D") {
+    debugMode = !debugMode;
+    return;
+  }
+
+  if (key === "s" || key === "S") {
+    gameState = STATE_START;
+    return;
+  }
+
+  if (key === "w" || key === "W") {
+    gameState = STATE_WIN;
+    return;
+  }
+
+  if (key === "o" || key === "O") {
+    gameState = STATE_OVER;
+    return;
+  }
+
+  if (key === "1" || key === "2" || key === "3") {
+    loadLevel(parseInt(key, 10));
+    gameState = STATE_PLAY;
+    return;
+  }
+
 }
 
 // ------------------------------------------------------------
