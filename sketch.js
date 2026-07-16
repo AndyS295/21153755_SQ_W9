@@ -433,8 +433,9 @@ function drawDebugPanel() {
   ];
   let buttonW = 88;
   let buttonH = 28;
-  let gap = 12;
-  let startX = 16;
+  let gap = 10;
+  let totalWidth = buttonLabels.length * buttonW + (buttonLabels.length - 1) * gap;
+  let startX = (width - totalWidth) / 2;
   let startY = panelY + 44;
 
   for (let i = 0; i < buttonLabels.length; i++) {
